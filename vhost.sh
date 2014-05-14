@@ -14,7 +14,7 @@
 			ServerAdmin webmaster@localhost
 			ServerName '${SERVER_DOMAIN}'
 			ServerAlias www.'${SERVER_DOMAIN}'
-			
+
 			DocumentRoot /var/www/'${SERVER_DOMAIN}'/public
 			<Directory />
 				Options FollowSymLinks
@@ -50,7 +50,7 @@
         		Deny from all
         		Allow from 127.0.0.0/255.0.0.0 ::1/128
     		</Directory>
-		</VirtualHost>" > /etc/apache2/sites-available/'${SERVER_DOMAIN}
+		</VirtualHost>" > /etc/apache2/sites-available/'${SERVER_DOMAIN}'.conf'
 	}
 
 	function showUsage() {
@@ -65,24 +65,25 @@
 		exit
 	}
 
-		
+	function addSite(){
+		a2ensite $SERVER_DOMAIN
+	}
+
 	#if there in only domain in arguements
 	if [[ $# == 1 ]]; then
     	createWWW
     	createConfig
-    	restartApache
+  		addSite
+	  	restartApache
  	fi
 
 	#check second command line arguement
 	if [[ $# == 2 ]]; then
 		if [[ $2 == "off" ]]; then
 			createConfig
+			addSite
 			restartApache
 		fi
 	fi
 
 	showUsage
-	
-
-
-
